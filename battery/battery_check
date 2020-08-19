@@ -20,13 +20,13 @@ main() {
     while true; do
         battery="echo $(acpi) | cut -d'%' -f1 | cut -d',' -d' '"
         battery_capacity=$($battery -f4)			                    		 \
-&&	    battery_status=$($battery -f3)				                     	 \
+&&	    battery_status=$($battery -f3)				                     	     \
 || 	    exit
 	    state="🔌"
-	    [ "$battery_status" = "Discharging," ]			                	 \
-&&	    state="🔋"						                                 \
-&& 	    [ "$battery_capacity" -le 25 ]				                         \
-&&	    warn="❗"						                                 \
+	    [ "$battery_status" = "Discharging," ]			                	     \
+&&	    state="🔋"						                                         \
+&& 	    [ "$battery_capacity" -le 25 ]				                             \
+&&	    warn="❗"						                                        \
 ||	    error 2	
 	    printf "\r$warn$state $battery_capacity%%" 
 	    unset warn; unset state
