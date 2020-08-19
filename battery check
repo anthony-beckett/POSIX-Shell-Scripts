@@ -1,0 +1,37 @@
+#!/bin/sh
+
+
+error() {
+	case $1 in
+		(1)
+			path="$($0 | cut -c 0-$(expr $0))"
+			echo "Error: see $path/Errors/error.txt"
+			printf "$(date)\nacpi is not installed, please install it\n\n" >> "$path/Errors/error.txt"
+			;;
+		(2)
+			printf "Error\n" # to be expanded
+			;;
+	esac
+	exit 1
+}
+
+
+main() {
+    while true; do
+        battery="echo $(acpi) | cut -d'%' -f1 | cut -d',' -d' '"
+        battery_capacity=$($battery -f4)			                     \
+&&	    battery_status=$($battery -f3)				                     \
+|| 	    exit
+	    state="🔌"
+	    [ "$battery_status" = "Discharging," ]			                 \
+&&	    state="🔋"						                                 \
+&& 	    [ "$battery_capacity" -le 25 ]				                     \
+&&	    warn="❗"						                                \
+||	    error 2	
+	    printf "\r$warn$state $battery_capacity%%" 
+	    unset warn; unset state
+	    sleep 1
+    done
+}
+
+$(command -v acpi 2>/dev/null) && main || error 1
