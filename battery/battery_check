@@ -26,7 +26,7 @@ main() {
 	    [ "$battery_status" = "Discharging," ]			                	         \
 &&	    state="🔋"						                                             \
 && 	    [ "$battery_capacity" -le 25 ]				                                 \
-&&	    warn="❗"						                                            \
+&&	    warn="❗"						                                             \
 ||	    error 2	
 	    printf "\r$warn$state $battery_capacity%%" 
 	    unset warn; unset state
